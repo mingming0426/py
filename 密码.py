@@ -1,7 +1,7 @@
 import random
 import string
 import sys
-
+from tkinter import *
 import easygui
 
 mms = ['慢的', '绿色', '红色的', '骄傲的', '蓝色的', '湿的', '胖的', '勇敢的']

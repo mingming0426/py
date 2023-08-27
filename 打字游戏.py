@@ -8,15 +8,16 @@
 """
 # 导入随机函数模块
 import random
+import sys
 import time
 
 import pygame
-import sys
 from playsound import playsound
 
 """
 第零部分：游戏开始说明提示
 """
+
 
 def tishi():
     # 初始化
@@ -35,7 +36,7 @@ def tishi():
            '4，总共漏掉10个字母游戏自动结束；\n\n\n' \
            '请点击鼠标开始吧！'
     # 多行输出游戏说明
-    blitlines(screen, text, font,  (255, 255, 255), 200, 100)
+    blitlines(screen, text, font, (255, 255, 255), 200, 100)
     # 通过不断循环来侦听事件
     while True:
         screen.blit(back, (0, 0))
@@ -53,6 +54,8 @@ def tishi():
                 menu()
             # 更新整个待显示的 Surface 对象到屏幕上
             pygame.display.flip()
+
+
 # def tishi():
 #     global shuoming
 #     print(time.ctime())
@@ -213,12 +216,14 @@ def updateColor():
     G = random.randint(0, 0)
     B = random.randint(0, 0)
 
+
 def blitlines(surf, text, renderer, color, x, y):
     h = renderer.get_height()
     lines = text.split('\n')
     for i, ll in enumerate(lines):
         txt_surface = renderer.render(ll, True, color)
-        surf.blit(txt_surface, (x, y+(i*h)))
+        surf.blit(txt_surface, (x, y + (i * h)))
+
 
 # main函数
 if __name__ == '__main__':
