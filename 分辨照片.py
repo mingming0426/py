@@ -2,6 +2,8 @@ import os
 import cv2
 from PIL import Image
 import face_recognition
+import paramiko
+from smb.SMBConnection import SMBConnection
 
 # 把输入路径中的图片文件找出，并返回包含所有图片文件名的数组
 def list_files(startpath):
@@ -13,6 +15,7 @@ def list_files(startpath):
 
     print("找到了 {} 个图片文件".format(len(wzlj)))
     return wzlj
+
 
 # 调用fr库进行人脸识别
 def face(img):
@@ -83,12 +86,50 @@ def is_image_file(file_path):
     # 检查扩展名是否在图片扩展名的列表中
     return file_extension in image_extensions
 
-# 主程序
-# 找到文件夹中的所有文件
-plist = list_files("E:\\codes\\testFiles")
 
-# 逐个文件调用人脸识别程序识别
-for i in plist:
-    if face(i):
-        # 把有人脸的图片，将文件名前面加上A
-        changeFileNmae(i)
+def do_Files(startpath):
+    # 找到文件夹中的所有文件
+    plist = list_files(startpath)
+    # 逐个文件调用人脸识别程序识别
+    for i in plist:
+        if face(i):
+            # 把有人脸的图片，将文件名前面加上A
+            changeFileNmae(i)
+
+
+def ssh_do_files(nasStartpath, localTempPath):
+    # 定义NAS设备的连接信息
+    nas_ip = '192.168.27.77'  # NAS设备的IP地址
+    nas_username = 'winefox'  # 登录NAS的用户名
+    nas_password = 'tt101009'  # 登录NAS的密码
+    # 创建SFTP客户端
+    ssh = paramiko.SSHClient()
+    ssh.connect(nas_ip, username=nas_username, password=nas_password)
+    sftp = ssh.open_sftp()
+    # 连接到NAS设备
+
+
+    # 定义要操作的NAS上的目录路径
+    for filename in sftp.listdir(nasStartpath):
+        local_file_path = os.path.join(localTempPath, filename)
+        # 获取文件绝对路径
+        file_path = nasStartpath + '/' + filename
+        # 下载文件
+        sftp.get(file_path, local_file_path)
+        if face(local_file_path):
+            print(file_path)
+            # 把有人脸的图片，将文件名前面加上A
+            # 重命名文件
+            # sftp.rename(file_path, "A"+file_path)
+
+    # 关闭连接
+    sftp.close()
+
+
+# 主程序
+startPath = "E:\\codes\\testFiles"
+do_Files(startPath)
+
+# sshStartpath = "\\Newnas\photo\湉湉13Y"
+# localTempPath = "E:\\codes\\testFiles"
+# ssh_do_files(sshStartpath, localTempPath)
