@@ -1,0 +1,1 @@
+colorList = ["red", "blue", "green", "yellow", "black", "pink", "orange"]
