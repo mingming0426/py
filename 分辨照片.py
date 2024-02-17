@@ -100,8 +100,8 @@ def do_Files(startpath):
 def ssh_do_files(nasStartpath, localTempPath):
     # 定义NAS设备的连接信息
     nas_ip = '192.168.27.77'  # NAS设备的IP地址
-    nas_username = 'root'  # 登录NAS机器的root
-    nas_password = 'css0709N'  # root的密码
+    nas_username = ''  # 登录NAS机器的root
+    nas_password = ''  # root的密码
     # 创建SFTP客户端
     ssh = paramiko.SSHClient()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
