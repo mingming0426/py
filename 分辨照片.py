@@ -100,10 +100,11 @@ def do_Files(startpath):
 def ssh_do_files(nasStartpath, localTempPath):
     # 定义NAS设备的连接信息
     nas_ip = '192.168.27.77'  # NAS设备的IP地址
-    nas_username = 'winefox'  # 登录NAS的用户名
-    nas_password = 'tt101009'  # 登录NAS的密码
+    nas_username = 'root'  # 登录NAS机器的root
+    nas_password = 'css0709N'  # root的密码
     # 创建SFTP客户端
     ssh = paramiko.SSHClient()
+    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     ssh.connect(nas_ip, username=nas_username, password=nas_password)
     sftp = ssh.open_sftp()
     # 连接到NAS设备
@@ -114,22 +115,26 @@ def ssh_do_files(nasStartpath, localTempPath):
         local_file_path = os.path.join(localTempPath, filename)
         # 获取文件绝对路径
         file_path = nasStartpath + '/' + filename
+        new_filename = 'A' + filename
+        new_file_path = nasStartpath + '/' + new_filename
+
         # 下载文件
         sftp.get(file_path, local_file_path)
         if face(local_file_path):
-            print(file_path)
+            os.remove(local_file_path)
+            print(new_file_path)
             # 把有人脸的图片，将文件名前面加上A
             # 重命名文件
-            # sftp.rename(file_path, "A"+file_path)
+            sftp.rename(file_path, new_file_path)
 
     # 关闭连接
     sftp.close()
 
 
 # 主程序
-startPath = "E:\\codes\\testFiles"
-do_Files(startPath)
+# startPath = "E:\\codes\\testFiles"
+# do_Files(startPath)
 
-# sshStartpath = "\\Newnas\photo\湉湉13Y"
-# localTempPath = "E:\\codes\\testFiles"
-# ssh_do_files(sshStartpath, localTempPath)
+sshStartpath = "/mnt/user/PHOTO/FujiFilm/"
+localTempPath = "E:\\codes\\testFiles"
+ssh_do_files(sshStartpath, localTempPath)
