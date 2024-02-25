@@ -150,28 +150,4 @@ btn1.pack(pady=20)
 btn2 = tkinter.Button(window, text="注册", font=("微软雅黑", 20), width=20, command=signin)
 btn2.pack()
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+window.mainloop()
