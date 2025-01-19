@@ -14,7 +14,7 @@ from freegames import floor, vector
 # Set window title and icon
 t.title("Pacman")
 root = t.Screen()._root
-root.iconbitmap("logo-ico.ico")
+
 
 state = {'score': 0}
 path = t.Turtle(visible=False)

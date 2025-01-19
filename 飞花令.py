@@ -1,34 +1,43 @@
 import time
 import string
-import tkinter  # 导入tkinter模块
-import tkinter.messagebox  # 导入tkinter.messagebox模块
+import tkinter  # 导入tkinter模块用于创建GUI
+import tkinter.messagebox  # 导入tkinter.messagebox模块用于显示消息框
 
-window = tkinter.Tk()  # 创建窗口
+# 创建主窗口
+window = tkinter.Tk()
 window.geometry("700x500")  # 设置窗口大小
 window.title("飞花令")  # 设置窗口标题
 
-# 创建文字标签
+# 创建用户界面元素：标签和输入框
 label1 = tkinter.Label(window, text="飞花令", font=("微软雅黑", 20))
-# 粘贴文字
 label1.pack(pady=50)
 
 label2 = tkinter.Label(window, text="请说一句带月的诗词吧：（用空格将前后两句隔开哦）", font=("微软雅黑", 20))
 label2.pack(pady=0)
 
-# 创建输入框
 entry1 = tkinter.Entry(window, font=("微软雅黑", 20), width=80)
 entry1.pack()
 
 
+# 函数：判断输入是否为中文
 def is_Chinese(words):
+    """
+    判断字符串中是否只包含中文字符。
+
+    参数:
+    words (str): 需要判断的字符串。
+
+    返回:
+    bool: 如果字符串中只包含中文字符，返回True；否则返回False。
+    """
     for ch in words:
         if ord(ch) < 13312 or ord(ch) > 40956:
             return False
-    else:
-        return True
+    return True
 
 
-f = open("诗词库.txt",encoding="gbk")
+# 从文件读取诗词库
+f = open("诗词库.txt", encoding="gbk")
 computerstore = f.readlines()
 f.close()
 computerstore = [i.strip("\n") for i in computerstore]
@@ -40,21 +49,30 @@ for k in computerstore:
     computerstoreDel.append(k)
 Dict = dict(zip(computerstoreDel, computerstore))
 sharedStore = []
-count = 3  # 超时
-Round = 5
+count = 3  # 超时次数
+Round = 5  # 游戏回合数
 time_start = time.time()
 
 
+# 主游戏逻辑函数
 def panduan(scount, sRound):
-    global count
-    global Round
-    global time_start
+    """
+    用户和计算机进行飞花令游戏的主逻辑函数。
+
+    参数:
+    scount (int): 用户的超时次数。
+    sRound (int): 游戏剩余回合数。
+
+    无返回值。
+    """
+    global count, Round, time_start
     while True:
         user = entry1.get()
-        user = ''.join(user.split())  # 将空格删掉
+        user = ''.join(user.split())  # 去除输入中的空格
         n = len(user)
         if n < 1:
             break
+        # 输入判断逻辑
         while True:
             if not is_Chinese(user):
                 tkinter.messagebox.showinfo("提示", "出现了汉字之外的字符哦，请再说一句吧：")
@@ -79,6 +97,7 @@ def panduan(scount, sRound):
             else:
                 break
 
+        # 更新游戏状态
         time_end = time.time()
         sharedStore.append(user)
         print(user);
@@ -108,13 +127,14 @@ def panduan(scount, sRound):
             break
 
 
+# 函数：启动游戏逻辑
 def change_b2(count, Round):
-    # global time_start
-    # time_start = time.time()
     panduan(count, Round)
 
 
-# 按钮
+# 创建并添加“确定”按钮到窗口
 btn2 = tkinter.Button(window, text="确定", font=("微软雅黑", 20), width=20, command=lambda: change_b2(count, Round))
 btn2.pack()
+
+# 运行窗口的主循环
 window.mainloop()
